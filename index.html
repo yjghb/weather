@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        div {
+            margin-top: 20px;
+            width: 1366px;
+        }
+
+        ul {
+            margin-top: 10px;
+            padding-top: 50px;
+            border: 2px solid #ddd;
+            height: 200px;
+        }
+
+        li {
+            text-align: center;
+            width: 180px;
+            background-color: #ccc;
+            margin-left: 12px;
+            float: left;
+            padding: 15px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="text" id="city">
+    <button id="btn">查询天气</button>
+
+    <div>
+        <p id="cityname">城市名称：</p>
+        <ul id="weather">
+            <li>
+                <p class="date">20日星期五</p>
+                <p class="high">高温 25℃</p>
+                <p class="low">低温 14℃</p>
+            </li>
+            <li>
+                <p class="date">日期</p>
+                <p class="high">高温 25℃</p>
+                <p class="low">低温 14℃</p>
+            </li>
+            <li>
+                <p class="date">日期</p>
+                <p class="high">高温 25℃</p>
+                <p class="low">低温 14℃</p>
+            </li>
+            <li>
+                <p class="date">日期</p>
+                <p class="high">高温 25℃</p>
+                <p class="low">低温 14℃</p>
+            </li>
+            <li>
+                <p class="date">日期</p>
+                <p class="high">高温 25℃</p>
+                <p class="low">低温 14℃</p>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>
+
+<script>
+    var city = document.getElementById('city');
+    
+    var btn = document.getElementById('btn');
+    var liList = document.getElementsByTagName('li');
+
+    btn.onclick = function (){
+        if(city.value == "") return;
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('get','http://wthrcdn.etouch.cn/WeatherApi?city=' + city.value);
+
+        xhr.send();
+
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4 && xhr.status == 200){
+                // xhr.responseText
+
+                var parser = new DOMParser();
+                var xml = parser.parseFromString(xhr.responseText,'text/xml');
+                
+                console.log(xml);
+
+                var weatherList = xml.getElementsByTagName('weather');
+                console.log(weatherList);
+                for(var i = 0;i < weatherList.length; i++){
+                    console.log(weatherList[i].children[0].innerHtml);
+                    // liList[i].children[0].innerHTML =   weatherList[i].children[0].innerHTML;
+                    // liList[i].children[1].innerHTML =   weatherList[i].children[1].innerHTML;
+                    // liList[i].children[2].innerHTML =   weatherList[i].children[2].innerHTML;
+                    liList[i].children[0].innerHTML = weatherList[i].children[0].innerHTML;
+                    liList[i].children[1].innerHTML = weatherList[i].children[1].innerHTML;
+                    liList[i].children[2].innerHTML = weatherList[i].children[2].innerHTML;
+                
+                }
+
+            }
+        }
+
+        
+    }
+
+
+</script>
+
